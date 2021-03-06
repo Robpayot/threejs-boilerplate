@@ -29,4 +29,4 @@ yarn build
 ```
 
 
-![alt text](https://github.com/Robpayot/threejs-boilerplate/blob/main/src/img/thumbnail.png?raw=true)
+![thumbnail](https://github.com/Robpayot/threejs-boilerplate/blob/main/src/img/thumbnail.png?raw=true)
