@@ -27,3 +27,6 @@ Build for production:
 ```bash
 yarn build
 ```
+
+
+![alt text](https://github.com/Robpayot/threejs-boilerplate/main/src/img/thumbnail.png?raw=true)
