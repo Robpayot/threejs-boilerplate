@@ -58,6 +58,15 @@ module.exports = {
         ].filter(Boolean),
       },
       {
+        test: /\.(glb|gltf|obj)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: { name: 'models/[name].[ext]' },
+          },
+        ],
+      },
+      {
         test: /\.(eot|ttf|woff|woff2)$/,
         use: [
           {
