@@ -3,12 +3,13 @@
 Simple project set up for three.js experiments
 
 Prerequisite:
-- Nodejs
-- Yarn
+- [Nodejs, npm](https://nodejs.org/en/)
+- [Yarn](https://yarnpkg.com/getting-started/install)
 
 Built with:
-- Webpack
-- Three.js
+
+- [Webpack](https://webpack.js.org/)
+- [Three.js](https://threejs.org/)
 
 ### Commands
 
