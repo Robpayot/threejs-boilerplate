@@ -2,11 +2,13 @@
 
 Simple project set up for three.js experiments
 
-Built with:
+Prerequisite:
+- Nodejs
+- Yarn
 
+Built with:
 - Webpack
-- Babel
-- SASS
+- Three.js
 
 ### Commands
 
