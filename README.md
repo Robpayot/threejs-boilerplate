@@ -32,4 +32,4 @@ yarn build
 ```
 
 
-![thumbnail](https://github.com/Robpayot/threejs-boilerplate/blob/main/src/img/thumbnail.png?raw=true)
+![thumbnail](https://user-images.githubusercontent.com/5593293/111908348-2d336f00-8a59-11eb-8cd6-a73596f8e3c3.png)
