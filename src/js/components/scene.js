@@ -5,28 +5,29 @@ import Stats from 'stats-js'
 const ASSETS = 'img/'
 
 export default class Scene {
+  canvas = null
+  renderer = null
+  scene = null
+  camera = null
+  controls = null
+  stats = null
+  width = 0
+  height = 0
+
   constructor(el) {
     this.canvas = el
 
-    this.load()
+    this.init()
   }
 
-  load() {
-    const textureLoader = new THREE.TextureLoader()
-    textureLoader.load(`${ASSETS}texture.png`, result => {
-      this.texture = result
-      this.init()
-    })
-  }
-
-  init = () => {
-    this.buildStats()
-    this.buildScene()
-    this.buildRender()
-    this.buildCamera()
-    this.buildControls()
-    this.buildAxesHelper()
-    this.buildBox()
+  init() {
+    this.setStats()
+    this.setScene()
+    this.setRender()
+    this.setCamera()
+    this.setControls()
+    this.setAxesHelper()
+    this.setBox()
 
     this.handleResize()
 
@@ -34,33 +35,40 @@ export default class Scene {
     this.events()
   }
 
-  buildStats() {
-    this.stats = new Stats()
-    this.stats.showPanel(0)
-    document.body.appendChild(this.stats.dom)
-  }
-
-  buildScene() {
-    this.scene = new THREE.Scene()
-  }
-
-  buildRender() {
+  /**
+   * Our Webgl renderer, an object that will draw everything in our canvas
+   * https://threejs.org/docs/?q=rend#api/en/renderers/WebGLRenderer
+   */
+  setRender() {
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       antialias: true,
     })
   }
 
-  buildCamera() {
+  /**
+   * This is our scene, we'll add any object
+   * https://threejs.org/docs/?q=scene#api/en/scenes/Scene
+   */
+  setScene() {
+    this.scene = new THREE.Scene()
+    this.scene.background = new THREE.Color(0xffffff)
+  }
+
+  /**
+   * Our Perspective camera, this is the point of view that we'll have
+   * of our scene.
+   * A perscpective camera is mimicing the human eyes so something far we'll
+   * look smaller than something close
+   * https://threejs.org/docs/?q=pers#api/en/cameras/PerspectiveCamera
+   */
+  setCamera() {
     const aspectRatio = this.width / this.height
     const fieldOfView = 60
     const nearPlane = 0.1
     const farPlane = 10000
 
     this.camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane)
-    this.camera.updateProjectionMatrix()
-    this.initPosY = 0
-    this.initPosY = 100
     this.camera.position.y = 5
     this.camera.position.x = 5
     this.camera.position.z = 5
@@ -69,40 +77,77 @@ export default class Scene {
     this.scene.add(this.camera)
   }
 
-  buildControls() {
+  /**
+   * Threejs controls to have controls on our scene
+   * https://threejs.org/docs/?q=orbi#examples/en/controls/OrbitControls
+   */
+  setControls() {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
-    // this.controls.enableDamping = true
   }
 
   /**
    * Axes Helper
+   * https://threejs.org/docs/?q=Axesh#api/en/helpers/AxesHelper
    */
-  buildAxesHelper() {
+  setAxesHelper() {
     const axesHelper = new THREE.AxesHelper(3)
     this.scene.add(axesHelper)
   }
 
-  buildBox() {
+  /**
+   * Create a BoxGeometry
+   * https://threejs.org/docs/?q=box#api/en/geometries/BoxGeometry
+   * with a Basic material
+   * https://threejs.org/docs/?q=mesh#api/en/materials/MeshBasicMaterial
+   */
+  setBox() {
     const geometry = new THREE.BoxGeometry(1, 1, 1)
-    const material = new THREE.MeshBasicMaterial({ map: this.texture })
+    const material = new THREE.MeshBasicMaterial({ color: 0x000000 })
 
     const mesh = new THREE.Mesh(geometry, material)
     this.scene.add(mesh)
   }
 
+  /**
+   * Build stats to display fps
+   */
+  setStats() {
+    this.stats = new Stats()
+    this.stats.showPanel(0)
+    document.body.appendChild(this.stats.dom)
+  }
+
+  /**
+   * List of events
+   */
   events() {
     window.addEventListener('resize', this.handleResize, { passive: true })
-    this.handleRAF(0)
+    this.draw(0)
   }
 
   // EVENTS
 
-  handleRAF = now => {
+  /**
+   * Request animation frame function
+   * This function is called 60/time per seconds with no performance issue
+   * Everything that happens in the scene is drawed here
+   * @param {Number} now
+   */
+  draw = now => {
     // now: time in ms
-    this.render(now)
-    this.raf = window.requestAnimationFrame(this.handleRAF)
+    this.stats.begin()
+
+    if (this.controls) this.controls.update() // for damping
+    this.renderer.render(this.scene, this.camera)
+
+    this.stats.end()
+    this.raf = window.requestAnimationFrame(this.draw)
   }
 
+  /**
+   * On resize, we need to adapt our camera based
+   * on the new window width and height and the renderer
+   */
   handleResize = () => {
     this.width = window.innerWidth
     this.height = window.innerHeight
@@ -115,15 +160,5 @@ export default class Scene {
 
     this.renderer.setPixelRatio(DPR)
     this.renderer.setSize(this.width, this.height)
-  }
-
-  // Render
-  render = now => {
-    this.stats.begin()
-
-    if (this.controls) this.controls.update() // for damping
-    this.renderer.render(this.scene, this.camera)
-
-    this.stats.end()
   }
 }
