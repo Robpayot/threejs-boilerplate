@@ -5,14 +5,14 @@ import Stats from 'stats-js'
 const ASSETS = 'img/'
 
 export default class Scene {
-  canvas = null
-  renderer = null
-  scene = null
-  camera = null
-  controls = null
-  stats = null
-  width = 0
-  height = 0
+  canvas
+  renderer
+  scene
+  camera
+  controls
+  stats
+  width
+  height
 
   constructor(el) {
     this.canvas = el
