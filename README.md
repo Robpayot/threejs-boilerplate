@@ -31,5 +31,13 @@ Build for production:
 yarn build
 ```
 
+### Troubleshooting Windows:
+
+You need to install this to make it work on windows
+
+```bash
+npm install -g win-node-env
+```
+
 
 ![thumbnail](https://user-images.githubusercontent.com/5593293/111908348-2d336f00-8a59-11eb-8cd6-a73596f8e3c3.png)
